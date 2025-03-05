@@ -1,0 +1,5 @@
+name: 'Ajax alter title'
+type: module
+description: 'A module to modify node titles by using Ajax buttons'
+package: Custom
+core_version_requirement: ^10 || ^11
