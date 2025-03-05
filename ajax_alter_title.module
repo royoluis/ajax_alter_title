@@ -54,15 +54,15 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
 function ajax_alter_title_cancel(&$form) {
   $response = new AjaxResponse();
 	$current_title = $form['title']['widget'][0]['value']['#default_value'];
-	$cancel_preffix = "CANCELED / ";
+	$cancel_prefix = "CANCELED / ";
 
-	if (!str_starts_with($current_title, $cancel_preffix)) {
-    $new_title = $cancel_preffix . $current_title;
-		$message = '<p style="color:red;">"' . $cancel_preffix . '" has been added. Please, <b>save this node</b></p>';
+	if (!str_starts_with($current_title, $cancel_prefix)) {
+    $new_title = $cancel_prefix . $current_title;
+		$message = '<p style="color:red;">"' . $cancel_prefix . '" has been added. Please, <b>save this node</b></p>';
   }
 	else {
     $new_title = $current_title;
-		$message = '<p style="color:red;">"' . $cancel_preffix . '" is already in the original title.</p>';
+		$message = '<p style="color:red;">"' . $cancel_prefix . '" is already in the original title.</p>';
   }
 
 	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$new_title]));
@@ -76,11 +76,11 @@ function ajax_alter_title_cancel(&$form) {
 function ajax_alter_title_delete_prefix(&$form) {
   $response = new AjaxResponse();
 	$current_title = $form['title']['widget'][0]['value']['#default_value'];
-	$cancel_preffix = "CANCELED / ";
+	$cancel_prefix = "CANCELED / ";
 
-	if (str_starts_with($current_title, $cancel_preffix)) {
-    $new_title = substr($current_title, strlen($cancel_preffix));
-		$message = '<p style="color:red;">"' . $cancel_preffix . '" has been deleted. Please, <b>save this node</b></p>';
+	if (str_starts_with($current_title, $cancel_prefix)) {
+    $new_title = substr($current_title, strlen($cancel_prefix));
+		$message = '<p style="color:red;">"' . $cancel_prefix . '" has been deleted. Please, <b>save this node</b></p>';
   }
 	else {
     $new_title = $current_title;
