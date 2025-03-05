@@ -15,7 +15,7 @@ use Drupal\Core\Ajax\HtmlCommand;
 function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $form_id) {
 	$form['canceled_title'] = [
 		'#type' => 'button',
-		'#value' => t('Canceled'),
+		'#value' => t('Add "Cancel" prefix'),
 		'#ajax' => [
 			'callback' => 'ajax_alter_title_cancel',
 			'wrapper' => 'edit-title-0-value',
@@ -58,11 +58,11 @@ function ajax_alter_title_cancel(&$form) {
 
 	if (!str_starts_with($current_title, $cancel_preffix)) {
     $new_title = $cancel_preffix . $current_title;
-		$message = '<p style="color:red;">Please, <b>save this node</b> after adding "'. $cancel_preffix . '".</p>';
+		$message = '<p style="color:red;">"' . $cancel_preffix . '" has been added. Please, <b>save this node</b></p>';
   }
 	else {
     $new_title = $current_title;
-		$message = '<p style="color:red;">"' . $cancel_preffix . '" is already in the title.</p>';
+		$message = '<p style="color:red;">"' . $cancel_preffix . '" is already in the original title.</p>';
   }
 
 	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$new_title]));
