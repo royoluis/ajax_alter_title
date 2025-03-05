@@ -15,7 +15,7 @@ use Drupal\Core\Ajax\HtmlCommand;
 function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $form_id) {
 	$form['canceled_title'] = [
 		'#type' => 'button',
-		'#value' => t('Add "Cancel" prefix'),
+		'#value' => t('Add "Canceled" prefix'),
 		'#ajax' => [
 			'callback' => 'ajax_alter_title_cancel',
 			'wrapper' => 'edit-title-0-value',
@@ -51,7 +51,7 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
 /**
  * AJAX callback to add the word 'Canceled' to node titles.
  */
-function ajax_alter_title_cancel(&$form) {
+function ajax_alter_title_cancel(&$form, &$form_state) {
   $response = new AjaxResponse();
 	$current_title = $form['title']['widget'][0]['value']['#default_value'];
 	$cancel_prefix = "CANCELED / ";
