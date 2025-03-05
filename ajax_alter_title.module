@@ -8,6 +8,23 @@
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ajax_alter_title_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.ajax_alter_title':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This custom module is a great option for a Drupal website to announce concerts by using nodes.') . '</p>';
+			$output .= '<p>' . t('Essentially, "ajax_alter_title" allows you to add the status of the concert to the title of its node.') . '</p>';
+			$output .= '<p>' . t('The status can be "canceled", "postponed" or "sold out".') . '</p>';
+      return $output;
+    default:
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
