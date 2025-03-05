@@ -1,5 +1,9 @@
 <?php
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+
 /**
  * @file
  * Primary module hooks for Ajax alter title module.
@@ -9,5 +13,45 @@
  * Implements hook_form_FORM_ID_alter().
  */
 function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $form_id) {
+	$form['canceled_title'] = [
+		'#type' => 'button',
+		'#value' => t('Canceled'),
+		'#ajax' => [
+			'callback' => 'ajax_alter_title_cancel',
+			'wrapper' => 'edit-title-0-value',
+			'event' => 'click',
+			'progress' => [
+				'type' => 'throbber',
+				'message' => 'Canceling title...'
+			]
+		]
+	];
 
+	$form['message_title'] = [
+		'#type' => 'markup',
+		'#markup' => '<div id="message-title"></div>',
+	];
+
+}
+
+/**
+ * AJAX callback to add the word 'Canceled' to node titles.
+ */
+function ajax_alter_title_cancel(&$form) {
+  $response = new AjaxResponse();
+	$current_title = $form['title']['widget'][0]['value']['#default_value'];
+	$cancel_preffix = "CANCELED / ";
+
+	if (!str_starts_with($current_title, $cancel_preffix)) {
+    $new_title = $cancel_preffix . $current_title;
+		$message = '<p style="color:red;">Please, <b>save this node</b> after adding "'. $cancel_preffix . '".</p>';
+  }
+	else {
+    $new_title = $current_title;
+		$message = '<p style="color:red;">"' . $cancel_preffix . '" is already in the title.</p>';
+  }
+
+	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$new_title]));
+  $response->addCommand(new HtmlCommand('#message-title', $message));
+  return $response;
 }
