@@ -82,6 +82,14 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
 
 /**
  * AJAX callback to add or delete prefixes.
+ *
+ * @param array &$form
+ *   The form structure.
+ * @param FormStateInterface &$form_state
+ *   The current state of the form.
+ *
+ * @return \Drupal\Core\Ajax\AjaxResponse
+ *   An AJAX response that updates the title field and displays a status message.
  */
 function ajax_alter_title_prefix(&$form, &$form_state) {
   $response = new AjaxResponse();
@@ -103,6 +111,16 @@ function ajax_alter_title_prefix(&$form, &$form_state) {
 
 /**
  * Gets new title and message.
+ *
+ * @param string $current_title
+ *   The current title of the node.
+ * @param string $prefix
+ *   The prefix to be added to the title.
+ *
+ * @return array
+ *   An array containing:
+ *   - The modified title (string).
+ *   - A message indicating the status of the operation (string).
  */
 function ajax_alter_title_get_parameters($current_title, $prefix) {
 	if (!str_starts_with($current_title, $prefix)) {
@@ -121,6 +139,14 @@ function ajax_alter_title_get_parameters($current_title, $prefix) {
 
 /**
  * Gets new title and message when deleting any prefix.
+ *
+ * @param string $current_title
+ *   The current title of the node.
+ *
+ * @return array
+ *   An array containing:
+ *   - The modified title (string).
+ *   - A message indicating whether a prefix was removed or no change was needed (string).
  */
 function ajax_alter_title_get_parameters_delete($current_title) {
 	if (preg_match('/^(CANCELED|POSTPONED|SOLD OUT)/', $current_title)) {
