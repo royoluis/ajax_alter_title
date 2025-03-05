@@ -1,13 +1,13 @@
 <?php
 
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\HtmlCommand;
-
 /**
  * @file
  * Primary module hooks for Ajax alter title module.
  */
+
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
 
 /**
  * Implements hook_form_FORM_ID_alter().
