@@ -15,9 +15,10 @@ use Drupal\Core\Ajax\HtmlCommand;
 function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $form_id) {
 	$form['canceled_title'] = [
 		'#type' => 'button',
-		'#value' => t('Add "Canceled" prefix'),
+		'#value' => t('Add "CANCELED" prefix'),
+		'#arg' => 'CANCELED',
 		'#ajax' => [
-			'callback' => 'ajax_alter_title_cancel',
+			'callback' => 'ajax_alter_title_prefix',
 			'wrapper' => 'edit-title-0-value',
 			'event' => 'click',
 			'progress' => [
@@ -27,11 +28,42 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
 		]
 	];
 
+	$form['postponed_title'] = [
+		'#type' => 'button',
+		'#value' => t('Add "POSTPONED" prefix'),
+		'#arg' => 'POSTPONED',
+		'#ajax' => [
+			'callback' => 'ajax_alter_title_prefix',
+			'wrapper' => 'edit-title-0-value',
+			'event' => 'click',
+			'progress' => [
+				'type' => 'throbber',
+				'message' => 'Postponing title...'
+			]
+		]
+	];
+
+	$form['sold_out_title'] = [
+		'#type' => 'button',
+		'#value' => t('Add "SOLD OUT" prefix'),
+		'#arg' => 'SOLD OUT',
+		'#ajax' => [
+			'callback' => 'ajax_alter_title_prefix',
+			'wrapper' => 'edit-title-0-value',
+			'event' => 'click',
+			'progress' => [
+				'type' => 'throbber',
+				'message' => 'Postponing title...'
+			]
+		]
+	];
+
 	$form['delete_title'] = [
 		'#type' => 'button',
-		'#value' => t('Delete preffix'),
+		'#value' => t('Delete current prefix'),
+		'#arg' => 'delete',
 		'#ajax' => [
-			'callback' => 'ajax_alter_title_delete_prefix',
+			'callback' => 'ajax_alter_title_prefix',
 			'wrapper' => 'edit-title-0-value',
 			'event' => 'click',
 			'progress' => [
@@ -49,45 +81,57 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
 }
 
 /**
- * AJAX callback to add the word 'Canceled' to node titles.
+ * AJAX callback to add or delete prefixes.
  */
-function ajax_alter_title_cancel(&$form, &$form_state) {
+function ajax_alter_title_prefix(&$form, &$form_state) {
   $response = new AjaxResponse();
 	$current_title = $form['title']['widget'][0]['value']['#default_value'];
-	$cancel_prefix = "CANCELED / ";
+	$prefix = $form_state->getTriggeringElement()['#arg'];
+	$default_options = ['CANCELED', 'POSTPONED', 'SOLD OUT'];
 
-	if (!str_starts_with($current_title, $cancel_prefix)) {
-    $new_title = $cancel_prefix . $current_title;
-		$message = '<p style="color:red;">"' . $cancel_prefix . '" has been added. Please, <b>save this node</b></p>';
-  }
+	if (in_array($prefix, $default_options)) {
+		$parameters = ajax_alter_title_get_parameters($current_title, $prefix);
+	}
 	else {
-    $new_title = $current_title;
-		$message = '<p style="color:red;">"' . $cancel_prefix . '" is already in the original title.</p>';
-  }
+		$parameters = ajax_alter_title_get_parameters_delete($current_title);
+	}
 
-	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$new_title]));
-  $response->addCommand(new HtmlCommand('#message-title', $message));
-  return $response;
+	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$parameters[0]]));
+  $response->addCommand(new HtmlCommand('#message-title', $parameters[1]));
+	return $response;
 }
 
 /**
- * AJAX callback to add the word 'Canceled' to node titles.
+ * Gets new title and message.
  */
-function ajax_alter_title_delete_prefix(&$form) {
-  $response = new AjaxResponse();
-	$current_title = $form['title']['widget'][0]['value']['#default_value'];
-	$cancel_prefix = "CANCELED / ";
-
-	if (str_starts_with($current_title, $cancel_prefix)) {
-    $new_title = substr($current_title, strlen($cancel_prefix));
-		$message = '<p style="color:red;">"' . $cancel_prefix . '" has been deleted. Please, <b>save this node</b></p>';
+function ajax_alter_title_get_parameters($current_title, $prefix) {
+	if (!str_starts_with($current_title, $prefix)) {
+		$current_title = preg_replace('/^(CANCELED \/|POSTPONED \/|SOLD OUT \/)\s*/', '', $current_title);
+    $new_title = $prefix . ' / ' . $current_title;
+		$message = '<p style="color:red;">"' . $prefix . '" has been added. Please, <b>save this node</b></p>';
   }
 	else {
     $new_title = $current_title;
-		$message = '<p style="color:red;">There is no prefix in the original title. </p>';
+		$message = '<p style="color:red;">"' . $prefix . '" is already in the original title.</p>';
   }
 
-	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$new_title]));
-  $response->addCommand(new HtmlCommand('#message-title', $message));
-  return $response;
+	$result = [$new_title, $message];
+	return $result;
+}
+
+/**
+ * Gets new title and message when deleting any prefix.
+ */
+function ajax_alter_title_get_parameters_delete($current_title) {
+	if (preg_match('/^(CANCELED|POSTPONED|SOLD OUT)/', $current_title)) {
+		$new_title = preg_replace('/^(CANCELED \/|POSTPONED \/|SOLD OUT \/)\s*/', '', $current_title);
+		$message = '<p style="color:red;">Prefix has been deleted. Please, <b>save this node</b></p>';
+	}
+	else {
+		$new_title = $current_title;
+		$message = '<p style="color:red;">There is no prefix in the original title. </p>';
+	}
+
+	$result = [$new_title, $message];
+	return $result;
 }
