@@ -27,6 +27,20 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
 		]
 	];
 
+	$form['delete_title'] = [
+		'#type' => 'button',
+		'#value' => t('Delete preffix'),
+		'#ajax' => [
+			'callback' => 'ajax_alter_title_delete_prefix',
+			'wrapper' => 'edit-title-0-value',
+			'event' => 'click',
+			'progress' => [
+				'type' => 'throbber',
+				'message' => 'Deleting preffix...'
+			]
+		]
+	];
+
 	$form['message_title'] = [
 		'#type' => 'markup',
 		'#markup' => '<div id="message-title"></div>',
@@ -49,6 +63,28 @@ function ajax_alter_title_cancel(&$form) {
 	else {
     $new_title = $current_title;
 		$message = '<p style="color:red;">"' . $cancel_preffix . '" is already in the title.</p>';
+  }
+
+	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$new_title]));
+  $response->addCommand(new HtmlCommand('#message-title', $message));
+  return $response;
+}
+
+/**
+ * AJAX callback to add the word 'Canceled' to node titles.
+ */
+function ajax_alter_title_delete_prefix(&$form) {
+  $response = new AjaxResponse();
+	$current_title = $form['title']['widget'][0]['value']['#default_value'];
+	$cancel_preffix = "CANCELED / ";
+
+	if (str_starts_with($current_title, $cancel_preffix)) {
+    $new_title = substr($current_title, strlen($cancel_preffix));
+		$message = '<p style="color:red;">"' . $cancel_preffix . '" has been deleted. Please, <b>save this node</b></p>';
+  }
+	else {
+    $new_title = $current_title;
+		$message = '<p style="color:red;">There is no prefix in the original title. </p>';
   }
 
 	$response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [$new_title]));
