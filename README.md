@@ -1,6 +1,6 @@
 <h1>Module description and functionality</h1>
 <p>This custom module is a great option for a Drupal website to announce cultural or sporting events by using nodes.</p>
-<p>Essentially, "ajax_alter_title" allows you to add the status of the concert to the title of its node.</p>
+<p>Essentially, "ajax_alter_title" allows you to add the event status to the title of its node.</p>
 
 ![image](https://github.com/user-attachments/assets/96e6217b-0371-450d-bb6b-d3fd915c8d65)
 
