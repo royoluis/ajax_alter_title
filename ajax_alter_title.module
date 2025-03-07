@@ -172,7 +172,7 @@ function ajax_alter_title_get_parameters_delete($current_title) {
 	}
 	else {
 		$new_title = $current_title;
-		$message = '<p style="color:red;">There is no prefix in the original title. </p>';
+		$message = '<p style="color:red;">There is no prefix in the original title.</p>';
 	}
 
 	$result = [$new_title, $message];
