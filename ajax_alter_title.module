@@ -60,7 +60,7 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
     ]
   ];
 
-	$form['sold_out_title'] = [
+  $form['sold_out_title'] = [
     '#type' => 'button',
     '#value' => t('Add "SOLD OUT" prefix'),
     '#arg' => 'SOLD OUT',
@@ -73,9 +73,9 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
         'message' => 'Updating title...'
       ]
     ]
-	];
+  ];
 
-	$form['delete_title'] = [
+  $form['delete_title'] = [
     '#type' => 'button',
     '#value' => t('Delete current prefix'),
     '#arg' => 'delete',
@@ -88,7 +88,7 @@ function ajax_alter_title_form_node_page_edit_form_alter(&$form, $form_state, $f
         'message' => 'Deleting preffix...'
       ]
     ]
-	];
+  ];
 
   $form['message_title'] = [
     '#type' => 'markup',
@@ -165,15 +165,15 @@ function ajax_alter_title_get_parameters($current_title, $prefix) {
  *   - A message indicating whether a prefix was removed or no change was needed (string).
  */
 function ajax_alter_title_get_parameters_delete($current_title) {
-	if (preg_match('/^(CANCELED|POSTPONED|SOLD OUT)/', $current_title)) {
-		$new_title = preg_replace('/^(CANCELED \/|POSTPONED \/|SOLD OUT \/)\s*/', '', $current_title);
-		$message = '<p style="color:red;">Prefix has been deleted. Please, <b>save this node</b></p>';
-	}
-	else {
-		$new_title = $current_title;
-		$message = '<p style="color:red;">There is no prefix in the original title.</p>';
-	}
+  if (preg_match('/^(CANCELED|POSTPONED|SOLD OUT)/', $current_title)) {
+    $new_title = preg_replace('/^(CANCELED \/|POSTPONED \/|SOLD OUT \/)\s*/', '', $current_title);
+    $message = '<p style="color:red;">Prefix has been deleted. Please, <b>save this node</b></p>';
+  }
+  else {
+    $new_title = $current_title;
+    $message = '<p style="color:red;">There is no prefix in the original title.</p>';
+  }
 
-	$result = [$new_title, $message];
-	return $result;
+  $result = [$new_title, $message];
+  return $result;
 }
