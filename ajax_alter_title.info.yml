@@ -1,4 +1,4 @@
-name: 'Ajax alter title'
+name: 'Ajax Alter Title'
 type: module
 description: 'A module to modify node titles by using Ajax buttons'
 package: Custom
