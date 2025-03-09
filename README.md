@@ -10,4 +10,9 @@
 ![image](https://github.com/user-attachments/assets/04e408b6-47a4-4ccc-8f77-75cf387d26cc)
 ![image](https://github.com/user-attachments/assets/d712534f-782b-4c74-a976-88843bd530e6)
 
-<p>This module has been built with Ajax. Feel free to use it or share it.</p>
+<p>This module has been built with Ajax.</p>
+
+<h2>Installation</h2>
+<p>Install as you would normally install a contributed Drupal module.</p>
+<p>See: https://www.drupal.org/node/895232 for further information.</p>
+<p>Feel free to share and use this custom module.</p>
